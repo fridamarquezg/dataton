@@ -1,11 +1,10 @@
 ---
-title: "Datatón"
-author: "Frida Márquez (PLAS), Alexa Enríquez (AVS), Lupita Moreno, Carmen Sofía Delgado"
+title: "Dataton"
+author: "Frida Márquez, Alexa Enríquez, Lupita Moreno, Carmen Sofía Delgado. (AVS, PLA)"
 date: "2024-09-22"
-output: html_document
 ---
 
-A lo largo de este documento se trabaja con datos del Censo de Población y Vivienda de la INEGI, del Directorio Estadístico Nacional de Unidades Economicas (DENUE) y de la Secretaría de Salud.
+A lo largo de este documento se trabaja con datos del Censo de Población y Vivienda de la INEGI, del Directorio Estadístico Nacional de Unidades Económicas (DENUE) y de la Secretaría de Salud.
 
 ## Importación de paquetes
 
@@ -28,13 +27,13 @@ Sys.setenv(OGR_GEOMETRY_ACCEPT_UNCLOSED_RING = "NO")
 secciones <- st_read("./recursos/SHAPEFILE/SECCION.shp")
 ```
 
-Veamos que el mapa de mexico delimitado por sección se pueda visualizar.
+Veamos el mapa de México delimitado por secciones electorales.
 
 ```{r}
 # Visualizamos el mapa
 ggplot()+
   geom_sf(data=secciones,
-          color='grey',
+         color='grey',
           fill='white',
           size=0.1)+
   theme_minimal()
@@ -46,7 +45,7 @@ Importamos los datos que necesitamos para el análisis.
 
 ```{r}
 # Leemos los datos del censo 2020 a nivel sección electoral
-censo <- read_csv("./recursos/Censo_2020/conjunto_de_datos/INE_SECCION_2020.CSV")
+censo <- read_csv("recursos/Censo_2020/conjunto_de_datos/INE_SECCION_2020.CSV")
 
 # Leemos los datos proporcionados por la DENUE y los filtramos para quedarnos con las columnas que nos interesan
 farmacias <- read_csv("recursos/denue_00_46321-46531_csv/conjunto_de_datos/denue_inegi_46321-46531_.csv") |>
@@ -59,7 +58,6 @@ servicios_de_salud <- read_csv("recursos/denue_00_62_csv/conjunto_de_datos/denue
 
 # Leemos los datos proporcionados por la secretaría de salud
 pacientes_cronicos <- read_csv("recursos/SALUD/DA_EC_SIS_2023/DA_EC_SIS_2023.csv", na = "NULL")
-
 variables_SIS <- read_csv("recursos/SALUD/LISTADO_DE_VARIABLES_SIS_2022.csv")
 ```
 
@@ -67,7 +65,7 @@ variables_SIS <- read_csv("recursos/SALUD/LISTADO_DE_VARIABLES_SIS_2022.csv")
 
 ### Inspección
 
-Primero inspeccionaremos cada dataframe para tener una idea de con que vamos a trabajar y saber si tenemos que hacerles algún cambio.
+Primero inspeccionaremos cada dataframe para tener una idea de los datos que tenemos y saber si hay que aplicar algunos filtros.
 
 #### Secciones
 
@@ -137,7 +135,7 @@ ggplot(censo, aes(POBTOT)) +
   labs(title="Distribución de la población total por sección electoral",
        x = "Población total",
        y = "Frecuencia") +
-  theme_minimal()
+  theme_minimal() 
 ```
 A simple vista podemos ver secciones electorales con una población mucho más alta que las demas.
 
@@ -154,7 +152,7 @@ Por lo anterior, aseguremonos que ninguna de las demás variables deben tener va
 censo[, 7:226] |>
   select(where(~ max(.x, na.rm = TRUE) > 50000))
 ```
-Ningún valor de cada variable supera los 50000. Podemos continuar con la inspección de los demás dataframes.
+Ningún valor supera los 50000. Podemos continuar con la inspección de los demás dataframes.
 
 #### Farmacias
 
@@ -284,7 +282,7 @@ names(secciones)
 
 #### Censo
 
-En primer lugar, selecionaremos las columnas que nos interesan de las categorías mencionadas durante la inspección de los datos.
+En primer lugar, seleccionaremos las columnas que nos interesan de las categorías mencionadas durante la inspección de los datos.
 
 ```{r}
 censo <- clean_names(censo) |>
@@ -424,132 +422,269 @@ names(censo_por_seccion)
 
 ### Análisis descriptivo
 
-#### Aguascalientes
+Definiremos una función que nos permita hacer un análisis descriptivo de una entidad en específico dada como parámetro. Eso nos permitirá poder automatizar generar las graficas para cada entidad.
 
-Primero definamos subconjuntos con los datos de Aguascalientes.
+Primero guardaremos un vector con las entidades federativas en el orden que las maneja el INEGI.
 
 ```{r}
-acs <- secciones |>
-  filter(entidad == 1)
+nombres_entidades <- c(
+  "Aguascalientes", "Baja California", "Baja California Sur", "Campeche", 
+  "Coahuila", "Colima", "Chiapas", "Chihuahua", "Ciudad de México", 
+  "Durango", "Guanajuato", "Guerrero", "Hidalgo", "Jalisco", "Edo. de México", 
+  "Michoacán", "Morelos", "Nayarit", "Nuevo León", "Oaxaca", "Puebla", 
+  "Querétaro", "Quintana Roo", "San Luis Potosí", "Sinaloa", "Sonora", 
+  "Tabasco", "Tamaulipas", "Tlaxcala", "Veracruz", "Yucatán", "Zacatecas")
+```
 
-ags_cen <- censo |>
-  filter(entidad == 1)
 
-ags_farm <- farmacias |>
-  filter(entidad == 1)
+```{r}
+analisis_descriptivo <- function(entidad_param, directorio="graficas"){
+  
+    # Crear el directorio para la entidad si no existe
+  subcarpeta <- file.path(directorio, paste(entidad_param, nombres_entidades[entidad_param]))
+  if (!dir.exists(subcarpeta)) {
+    dir.create(subcarpeta, recursive = TRUE)
+  }
+  
+  #Crear una carpeta para guardar más adelante un csv por cada entidad
+  carpeta_csv <- "csv_entidades"
+  if (!dir.exists(carpeta_csv)) {
+    dir.create(carpeta_csv, recursive = TRUE)
+  }
+  
+  #Filtramos la informacion por cada entidad
+  entidad_s <- secciones |>
+    filter(entidad == entidad_param)
+  
+  entidad_farm <- farmacias |>
+    filter(entidad == entidad_param)
+  
+  entidad_ss <- servicios_de_salud |>
+  filter(entidad == entidad_param)
+  
+  entidad_cps <- censo_por_seccion |>
+    filter(entidad == entidad_param)
+ 
+  entidad_zu <- edificaciones |>
+  filter(entidad == entidad_param)
+  
+  entidad_fps <- st_join(secciones[secciones$entidad == entidad_param,], farmacias[farmacias$entidad == entidad_param,]) |>
+    group_by(entidad.x, municipio.x, seccion) |>
+    summarise(num_farm = n())
+  
+  entidad_zups <- st_join(secciones[secciones$entidad == entidad_param,], edificaciones[edificaciones$entidad == entidad_param,]) |>
+    group_by(entidad.x, municipio.x, seccion) |>
+    summarise(num_zu = n())
+  
+  entidad_ssps <- st_join(secciones[secciones$entidad == entidad_param,], servicios_de_salud[servicios_de_salud$entidad == entidad_param,]) |>
+    group_by(entidad.x, municipio.x, seccion) |>
+    summarise(num_ss = n())
+  
+  entidad_cps <- censo_por_seccion |>
+    filter(entidad == entidad_param)
+  
+  # Descripcion numerica
+  
+  # A) Poblacion total
+  ord_pobtot <- entidad_cps |>
+    select(c(entidad, municipio, seccion, pobtot)) |>
+    arrange(desc(pobtot))
+  ord_pobtot[1:10,]
+  
+  # B) Poblacion de 60 años y mas
+  ord_p_60ymas <- entidad_cps |>
+    select(c(entidad, municipio, seccion, p_60ymas)) |>
+    arrange(desc(p_60ymas))
+  ord_p_60ymas[1:10,]
+  
+  # C) Poblacion economicamente activa
+  ord_pea <- entidad_cps |>
+    select(c(entidad, municipio, seccion, pea)) |>
+    arrange(desc(pea))
+  ord_pea[1:10,]
+  
+  # Visualizaciones
+  
+  # A) Poblacion total
+  graf_pobtot <- ggplot()+
+    # This layer maps the electoral sections and fills each one according to the 
+    # population density
+    geom_sf(data = ord_pobtot, aes(fill = as.numeric(pobtot)), color = "grey90")+
+    scale_fill_gradient(low = "white", high = "#750014", na.value = "skyblue")+
+    labs(title = paste("Población total por entidad electoral en", nombres_entidades[entidad_param]), fill="Cantidad de personas")+
+    theme_minimal()+
+    theme(legend.position = "bottom")
+  
+  # Guardar la gráfica de población total
+  ggsave(file.path(subcarpeta, paste0("poblacion_total_", entidad_param, ".jpg")), graf_pobtot, width = 8, height = 6)
+  
+  # B) Poblacion de 60 años y mas
+  graf_60ymas <- ggplot()+
+    geom_sf(data = ord_p_60ymas, aes(fill = as.numeric(p_60ymas)), color = "grey90")+
+    scale_fill_gradient(low = "white", high = "#750014", na.value = "skyblue")+
+    labs(title = paste("Densidad de adultos mayores por km² en", nombres_entidades[entidad_param]), fill="Cantidad de personas")+
+    theme_minimal()+
+    theme(legend.position = "bottom")
+  
+  # Guardar la gráfica de población de 60 años y más
+  ggsave(file.path(subcarpeta, paste0("poblacion_60ymas_", entidad_param, ".jpg")), graf_60ymas, width = 8, height = 6)
+  
+  # C) Poblacion economicamente activa
+  graf_pea <- ggplot()+
+    geom_sf(data = ord_pea, aes(fill = as.numeric(pea)), color = "grey90")+
+    scale_fill_gradient(low = "white", high = "#750014", na.value = "skyblue")+
+    labs(title = paste("Densidad de poblacion economicamente activa por km² en", nombres_entidades[entidad_param]), fill="Cantidad de personas")+
+    theme_minimal()+
+    theme(legend.position = "bottom")
+  
+    # Guardar la gráfica de población económicamente activa
+  ggsave(file.path(subcarpeta, paste0("poblacion_pea_", entidad_param, ".jpg")), graf_pea, width = 8, height = 6)
+  
 
-ags_zu <- edificaciones |>
-  filter(entidad == 1)
+    
+    # D) Creación de un mapa que muestre las farmacias, los servicios de salud y las edificaciones (para conocer las zonas urbanas)
+  
+  graf_farm <- ggplot() +
+    # Capa de las secciones del estado
+    geom_sf(data = entidad_s, fill = "lightgrey", color = "white") +
+    
+    # Capa de las farmacias como puntos
+    geom_sf(data = entidad_farm, aes(color = "Farmacias"), size = 0.5, alpha = 0.2) +
+    
+    # Capa de los servicios de salud como puntos
+    geom_sf(data = entidad_ss, aes(color = "Servicios de Salud"), size = 0.5, alpha = 0.2) +  
+    
+    # Capa de las edificaciones como puntos
+    geom_sf(data = entidad_zu, aes(color = "Edificaciones"), size = 0.5, alpha = 0.5) +  
+    
+    
+    scale_color_manual(values = c("red", "blue","green")) +
+    
+    labs(
+      title = paste("Ubicación de Farmacias, Servicios de Salud y Edificaciones en", nombres_entidades[entidad_param]),
+      color = "Localizaciones") +
+    theme_minimal() +
+    theme(legend.position = "bottom")
+    
+    # Guardar la gráfica de farmacias
+  ggsave(file.path(subcarpeta, paste0("farmacias_", entidad_param, ".jpg")), graf_farm, width = 8, height = 6)
+  
+  
+  #E) Creación de un heatmap de la correlación de las variables
+  entidad_fps <- rename(entidad_fps, municipio = municipio.x)
+  entidad_zups <- rename(entidad_zups, municipio = municipio.x)
+  entidad_ssps <- rename(entidad_ssps, municipio = municipio.x)
+  
+  df <- st_drop_geometry(entidad_cps) |> left_join(st_drop_geometry(entidad_fps), by = c("municipio", "seccion")) |>
+    left_join(st_drop_geometry(entidad_zups), by = c("municipio", "seccion")) |>
+    left_join(st_drop_geometry(entidad_ssps), by = c("municipio", "seccion"))
+  
+  
+  corr <- df[, 8:ncol(df)] |>
+    select(where(is.numeric)) |>                 
+    select(-contains(c("entidad", "id", "tipo", "distrito", "porc"))) |>              
+    cor(use = "pairwise.complete.obs")
+  
+  heatmap_plot <- ggplot(data = melt(corr), aes(x = Var1, y = Var2)) +
+    geom_tile(aes(fill = value), color = "white") +  
+    geom_text(aes(label = round(value, 1)), color = "black", size = 1) +  
+    scale_fill_gradient(low = "white", high = "red", na.value = "grey50") +  
+    theme_minimal() +  
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),  
+          panel.grid.major = element_blank(), 
+          panel.grid.minor = element_blank()) +
+    labs(title = "Heatmap de Correlación", x = "Variables", y = "Variables") +
+    coord_fixed()
+  
+  ggsave(file.path(subcarpeta, paste0("heatmap_", entidad_param, ".jpg")), heatmap_plot, width = 8, height = 6)
 
-ags_ss <- servicios_de_salud |>
-  filter(entidad == 1)
-
-ags_cps <- censo_por_seccion |>
-  filter(entidad == 1)
-
-ags_fps <- st_join(secciones[secciones$entidad == 1,], farmacias[farmacias$entidad == 1,]) |>
-  group_by(entidad.x, municipio.x, seccion) |>
-  summarise(num_farm = n())
-
-ags_zups <- st_join(secciones[secciones$entidad == 1,], edificaciones[edificaciones$entidad == 1,]) |>
-  group_by(entidad.x, municipio.x, seccion) |>
-  summarise(num_zu = n())
-
-ags_ssps <- st_join(secciones[secciones$entidad == 1,], servicios_de_salud[servicios_de_salud$entidad == 1,]) |>
-  group_by(entidad.x, municipio.x, seccion) |>
-  summarise(num_ss = n())
-
-ags_pec <- left_join(secciones[secciones$entidad == 1,], pacientes_cronicos[pacientes_cronicos$entidad == 1,],
-                             by = c("entidad" = "entidad",
-                                    "municipio" = "municipio")) |>
-  group_by(entidad, municipio) |>
-  summarise(num_pec = sum(totfrs))
+  #F) Creación de un csv por entidad tomando en cuenta las variables que tienen más correlación con el número de farmacias. Este csv se usará después para aplicar un modelo. 
+  
+  df_modelo <- df[, c("entidad", "municipio", "seccion", "pobtot", "p_60ymas", "p18ym_pb", "pea", "vph_inter", "num_zu", "num_ss", "num_farm")]
+  
+  write.csv(df_modelo, file = file.path(carpeta_csv, paste0(entidad_param, nombres_entidades[entidad_param], ".csv")), row.names = FALSE)
+  
+}
 
 ```
 
-Secciones electorales más pobladas.
-
-*Descripción numérica*
+Ahora, probamos con Aguascalientes
 
 ```{r}
-ord_pobtot <- ags_cps |>
-  select(c(entidad, municipio, seccion, pobtot)) |>
-  arrange(desc(pobtot))
-ord_pobtot[1:10,]
+analisis_descriptivo(1, "graficas")
 ```
 
-*Descripción gráfica*
+
+Las graficas de aguascalientes se estan guardando en un vector de visualizaciones. Eso podemos utilizarlo para vectorizar la funcion y obtener de todas. Para vectorizarlo:
 
 ```{r}
-ggplot()+
-  # This layer maps the electoral sections and fills each one according to the 
-  # population density
-  geom_sf(data = ord_pobtot, aes(fill = as.numeric(pobtot)), color = "grey90")+
-  scale_fill_gradient(low = "white", high = "#750014", na.value = "skyblue")+
-  labs(fill = "Población total por entidad electoral")+
-  theme_minimal()+
-  theme(legend.position = "bottom")
+entidades <- c(1:32)
+graficas_por_entidad <- lapply(entidades, analisis_descriptivo)
 ```
 
-Selecciones electorales con mayor número de adultos mayores por km².
-
-*Descripción numérica*
+Utilizamos los csv de cada entidad para crear un nuevo csv llamado "nacion", en donde se encuentra la información de todas las entidades. Por fines practicos, el nacion.csv ya esta incluido en el repositorio.
 
 ```{r}
-ord_p_60ymas <- ags_cps |>
-  select(c(entidad, municipio, seccion, p_60ymas)) |>
-  arrange(desc(p_60ymas))
-ord_p_60ymas[1:10,]
+#Cargar los datos de nacion.cvs
+df_modelo <-read_csv("nacion.csv")
+df_modelo <- drop_na(df_modelo)
+
+#Normalizamos los datos para estandarizar la escala de las variables
+normalizar <- function(x) {
+  return((x - min(x)) / (max(x) - min(x)))
+}
+
+#Funcion del modelo 
+modelo <- function(df) {
+  df_norm <- df[, 4:ncol(df)]
+  df_norm[] <- lapply(df_norm, normalizar)
+  
+  total <- numeric(nrow(df_norm))
+  
+#Asignamos estos pesos a cada columna. El número de farmacias tiene un mayor peso porque nos interesan los lugares en donde no hay muchas farmacias.
+  pesos <- c(0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.3)
+  
+  for (i in 1:nrow(df_norm)) {
+    for (j in 1:ncol(df_norm)) {
+      if (j == ncol(df_norm)) {
+        total[i] <- total[i] + pesos[j] * (1 -df_norm[i, j])
+      } else {
+        total[i] <- total[i] + pesos[j] * df_norm[i, j]
+      }
+    }
+  }
+  df_norm$total <- unlist(total)
+  df_result <- cbind(df[, 1:3], df_norm)
+  return(df_result)
+}
+
+#Aplicamos el modelo al dataframe con la información de la nación.
+df_result <- modelo(df_modelo)
+
+#Filtramos con las 200 farmacias que tengan un "total" mayor. La columna total nos da la calificación que calcula el modelo para decir que tan conveniente es poner una farmacia en esa ubicación.
+
+ubicaciones_recomendadas <- head(arrange(df_result, desc(total)), 201)
+
+#Convertimos el resultado a un csv.
+write.csv(ubicaciones_recomendadas, file = "ubicaciones_recomendadas.csv", row.names = FALSE)
 ```
 
-*Descripción gráfica*
+Como el csv que contiene la clave numerica con la que se identifica cada entidad y cada municipio, decidimos hacer un diccionario.
 
 ```{r}
-ggplot()+
-  geom_sf(data = ord_p_60ymas, aes(fill = as.numeric(p_60ymas)), color = "grey90")+
-  scale_fill_gradient(low = "white", high = "#750014", na.value = "skyblue")+
-  labs(fill = "Densidad de adultos mayores por km²")+
-  theme_minimal()+
-  theme(legend.position = "bottom")
+
+farmacias <- read_csv("./recursos/denue_00_46321-46531_csv/conjunto_de_datos/denue_inegi_46321-46531_.csv")
+nombres <- unique(select(farmacias,cve_ent,entidad,cve_mun,municipio))
+
+nombres$cve_ent <- as.numeric(nombres$cve_ent)
+nombres$cve_mun <- as.numeric(nombres$cve_mun)
+
+diccionario<- left_join(nombres,ubicaciones_recomendadas,by=c("cve_ent"="entidad","cve_mun"="municipio")) |>
+  select(c(cve_ent,entidad,cve_mun, municipio))|>
+  unique()
+
+write.csv(diccionario, file = "diccionario.csv", row.names = FALSE)
 ```
 
-Secciones electorales con mayor número de población económicamente activa por km².
+Usando Tableau, hicimos un leftjoin() entre los csv "diccionario" y "ubicaciones_recomendadas" para conocer el nombre de los municipios y entidades. El archivo se llama "farmacias_recomendadas_ubicacion.csv". Dada esta información, fue hecha la presentación.
 
-*Descripción numérica*
-
-```{r}
-ord_pea <- ags_cps |>
-  select(c(entidad, municipio, seccion, pea)) |>
-  arrange(desc(pea))
-ord_pea[1:10,]
-```
-
-*Descripción Gráfica*
-
-```{r}
-ggplot()+
-  geom_sf(data = ord_pea, aes(fill = as.numeric(pea)), color = "grey90")+
-  scale_fill_gradient(low = "white", high = "#750014", na.value = "skyblue")+
-  labs(fill = "Densidad de población económicamente activa por km²")+
-  theme_minimal()+
-  theme(legend.position = "bottom")
-```
-
-Número de farmacias por sección electoral.
-
-*Descripción Numérica*
-
-```{r}
-max_10_farm <- ags_fps[, 1:4] |>
-  arrange(desc(num_farm))
-max_10_farm[1:10,]
-```
-
-*Descripción gráfica*
-
-```{r}
-ggplot() +
-  geom_sf(data = acs, color = "grey80", fill= "white", size = 0.1) +
-  geom_sf(data = ags_farm, color = "#750014", alpha = 0.05, size = 0.5) +
-  theme_minimal()
-```
