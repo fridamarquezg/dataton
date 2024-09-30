@@ -4,7 +4,7 @@ author: "Frida Márquez, Alexa Enríquez, Lupita Moreno, Carmen Sofía Delgado. 
 date: "2024-09-22"
 ---
 
-A lo largo de este documento se trabaja con datos del Censo de Población y Vivienda de la INEGI, del Directorio Estadístico Nacional de Unidades Económicas (DENUE) y de la Secretaría de Salud. Los datos son muy pesados, los datos del INEGI se encuentran en el siguiente link: y algunas de las carperas que se crearon en el proceso que fuimos haciendo el código se encuentran en los archivos .zip. 
+A lo largo de este documento se trabaja con datos del Censo de Población y Vivienda de la INEGI, del Directorio Estadístico Nacional de Unidades Económicas (DENUE) y de la Secretaría de Salud. Los datos son muy pesados, los datos del INEGI se encuentran en el siguiente link: https://drive.google.com/drive/folders/1szEv161s6WpSd6SYmf5iT2rQVHHxypm8?usp=sharing y algunas de las carperas que se crearon en el proceso que fuimos haciendo el código se encuentran en los archivos .zip. 
 
 ## Importación de paquetes
 
