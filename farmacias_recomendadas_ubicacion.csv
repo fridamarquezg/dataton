@@ -1,0 +1,201 @@
+﻿entidad,Nom_entidad,municipio,Nom_municipio,seccion
+1,Aguascalientes,1,Aguascalientes,156
+1,Aguascalientes,1,Aguascalientes,326
+1,Aguascalientes,1,Aguascalientes,322
+1,Aguascalientes,1,Aguascalientes,83
+1,Aguascalientes,5,Jesús María,413
+2,Baja California,2,Mexicali,538
+2,Baja California,2,Mexicali,444
+2,Baja California,2,Mexicali,470
+2,Baja California,2,Mexicali,501
+2,Baja California,2,Mexicali,398
+2,Baja California,4,Tijuana,1498
+2,Baja California,4,Tijuana,1775
+2,Baja California,4,Tijuana,1786
+2,Baja California,1,Ensenada,14
+2,Baja California,1,Ensenada,172
+4,Campeche,1,Calkiní,81
+5,Coahuila de Zaragoza,35,Torreón,1351
+5,Coahuila de Zaragoza,35,Torreón,1354
+5,Coahuila de Zaragoza,35,Torreón,1310
+5,Coahuila de Zaragoza,35,Torreón,1184
+5,Coahuila de Zaragoza,30,Saltillo,907
+5,Coahuila de Zaragoza,30,Saltillo,755
+5,Coahuila de Zaragoza,30,Saltillo,734
+5,Coahuila de Zaragoza,30,Saltillo,766
+5,Coahuila de Zaragoza,30,Saltillo,777
+6,Colima,8,Minatitlán,248
+6,Colima,8,Minatitlán,236
+6,Colima,8,Minatitlán,238
+6,Colima,5,Cuauhtémoc,146
+6,Colima,5,Cuauhtémoc,145
+7,Chiapas,102,Tuxtla Chico,1640
+7,Chiapas,102,Tuxtla Chico,1736
+7,Chiapas,102,Tuxtla Chico,1638
+7,Chiapas,102,Tuxtla Chico,1737
+7,Chiapas,102,Tuxtla Chico,1616
+8,Chihuahua,37,Juárez,1642
+8,Chihuahua,37,Juárez,1683
+8,Chihuahua,19,Chihuahua,641
+8,Chihuahua,19,Chihuahua,608
+8,Chihuahua,19,Chihuahua,805
+9,Ciudad de México,16,Miguel Hidalgo,5157
+9,Ciudad de México,10,Álvaro Obregón,3295
+9,Ciudad de México,11,Tláhuac,3628
+10,Durango,5,Durango,148
+10,Durango,5,Durango,385
+11,Guanajuato,20,León,1495
+11,Guanajuato,20,León,1508
+11,Guanajuato,20,León,1282
+11,Guanajuato,20,León,1614
+11,Guanajuato,20,León,1490
+11,Guanajuato,7,Celaya,343
+11,Guanajuato,7,Celaya,336
+11,Guanajuato,5,Apaseo el Grande,315
+12,Guerrero,1,Acapulco de Juárez,310
+12,Guerrero,29,Chilpancingo de los Bravo,1267
+13,Hidalgo,83,Zempoala,1630
+13,Hidalgo,12,Atotonilco el Grande,221
+13,Hidalgo,40,La Misión,731
+13,Hidalgo,40,La Misión,740
+13,Hidalgo,47,Pacula,960
+13,Hidalgo,47,Pacula,934
+14,Jalisco,120,Zapopan,3033
+14,Jalisco,120,Zapopan,3068
+14,Jalisco,120,Zapopan,2969
+14,Jalisco,120,Zapopan,3087
+14,Jalisco,120,Zapopan,3226
+14,Jalisco,120,Zapopan,3026
+14,Jalisco,98,San Pedro Tlaquepaque,2445
+14,Jalisco,98,San Pedro Tlaquepaque,3453
+14,Jalisco,46,Jalostotitlán,1597
+14,Jalisco,72,San Diego de Alejandría,2024
+14,Jalisco,72,San Diego de Alejandría,2030
+14,Jalisco,69,Quitupan,1998
+14,Jalisco,69,Quitupan,1941
+14,Jalisco,99,Tolimán,2564
+14,Jalisco,99,Tolimán,2619
+14,Jalisco,102,Tonaya,2676
+14,Jalisco,102,Tonaya,2677
+14,Jalisco,102,Tonaya,2721
+14,Jalisco,102,Tonaya,2675
+14,Jalisco,102,Tonaya,2695
+14,Jalisco,102,Tonaya,2728
+15,México,109,Tultitlán,5472
+15,México,109,Tultitlán,5465
+15,México,24,Cuautitlán,691
+15,México,24,Cuautitlán,671
+15,México,121,Cuautitlán Izcalli,5881
+15,México,121,Cuautitlán Izcalli,5904
+15,México,121,Cuautitlán Izcalli,5912
+15,México,13,Atizapán de Zaragoza,416
+15,México,82,Tejupilco,4228
+15,México,82,Tejupilco,4208
+15,México,59,Nextlalpan,3044
+15,México,61,Nopaltepec,3792
+15,México,119,Zumpahuacán,5837
+15,México,26,Chapa de Mota,1043
+15,México,26,Chapa de Mota,1054
+15,México,38,Isidro Fabela,2025
+15,México,38,Isidro Fabela,2024
+15,México,38,Isidro Fabela,2036
+16,Michoacán de Ocampo,50,Maravatío,868
+16,Michoacán de Ocampo,89,Tepalcatepec,1977
+16,Michoacán de Ocampo,103,Venustiano Carranza,2293
+16,Michoacán de Ocampo,54,Morelos,1221
+16,Michoacán de Ocampo,54,Morelos,1268
+16,Michoacán de Ocampo,54,Morelos,1191
+16,Michoacán de Ocampo,54,Morelos,1224
+16,Michoacán de Ocampo,54,Morelos,1107
+18,Nayarit,17,Tepic,799
+18,Nayarit,4,Compostela,118
+19,Nuevo León,21,General Escobedo,491
+19,Nuevo León,12,Ciénega de Flores,232
+19,Nuevo León,48,Santa Catarina,2002
+19,Nuevo León,6,Apodaca,102
+19,Nuevo León,6,Apodaca,108
+19,Nuevo León,18,García,346
+19,Nuevo León,18,García,2598
+19,Nuevo León,42,Los Ramones,1708
+19,Nuevo León,32,Lampazos de Naranjo,2661
+19,Nuevo León,10,El Carmen,218
+19,Nuevo León,10,El Carmen,220
+19,Nuevo León,40,Parás,2134
+19,Nuevo León,40,Parás,2124
+19,Nuevo León,40,Parás,1422
+20,Oaxaca,400,Santa María Camotlán,1784
+20,Oaxaca,566,San Mateo Yucutindoo,2428
+21,Puebla,115,Quecholac,1205
+21,Puebla,115,Quecholac,1552
+21,Puebla,115,Quecholac,1246
+21,Puebla,115,Quecholac,1586
+21,Puebla,107,Olintla,858
+21,Puebla,42,Cuayuca de Andrade,339
+21,Puebla,42,Cuayuca de Andrade,325
+21,Puebla,155,Tecomatlán,1934
+21,Puebla,35,Coxcatlán,291
+21,Puebla,141,San Pedro Yeloixtlahuaca,1840
+21,Puebla,120,San Antonio Cañada,1663
+21,Puebla,120,San Antonio Cañada,1669
+22,Querétaro,14,Querétaro,545
+22,Querétaro,14,Querétaro,491
+22,Querétaro,14,Querétaro,404
+22,Querétaro,14,Querétaro,278
+22,Querétaro,14,Querétaro,754
+22,Querétaro,14,Querétaro,553
+22,Querétaro,5,Colón,99
+22,Querétaro,10,Landa de Matamoros,761
+22,Querétaro,10,Landa de Matamoros,205
+22,Querétaro,10,Landa de Matamoros,195
+23,Quintana Roo,1,Cozumel,626
+23,Quintana Roo,1,Cozumel,175
+23,Quintana Roo,8,Solidaridad,874
+23,Quintana Roo,2,Felipe Carrillo Puerto,195
+24,San Luis Potosí,28,San Luis Potosí,775
+24,San Luis Potosí,28,San Luis Potosí,1106
+24,San Luis Potosí,28,San Luis Potosí,787
+24,San Luis Potosí,28,San Luis Potosí,1074
+24,San Luis Potosí,28,San Luis Potosí,1110
+24,San Luis Potosí,28,San Luis Potosí,1039
+24,San Luis Potosí,35,Soledad de Graciano Sánchez,1273
+24,San Luis Potosí,35,Soledad de Graciano Sánchez,1304
+24,San Luis Potosí,35,Soledad de Graciano Sánchez,1247
+24,San Luis Potosí,35,Soledad de Graciano Sánchez,1274
+25,Sinaloa,6,Culiacán,887
+25,Sinaloa,6,Culiacán,1477
+25,Sinaloa,6,Culiacán,1210
+25,Sinaloa,6,Culiacán,1279
+25,Sinaloa,12,Mazatlán,2691
+25,Sinaloa,12,Mazatlán,2988
+26,Sonora,30,Hermosillo,217
+26,Sonora,49,Quiriego,590
+26,Sonora,49,Quiriego,571
+26,Sonora,49,Quiriego,532
+26,Sonora,49,Quiriego,341
+26,Sonora,49,Quiriego,1332
+26,Sonora,59,Santa Cruz,951
+26,Sonora,59,Santa Cruz,956
+26,Sonora,59,Santa Cruz,807
+27,Tabasco,4,Centro,440
+27,Tabasco,4,Centro,232
+28,Tamaulipas,32,Reynosa,1125
+28,Tamaulipas,41,Victoria,1682
+28,Tamaulipas,27,Nuevo Laredo,866
+28,Tamaulipas,9,Ciudad Madero,165
+30,Veracruz de Ignacio de la Llave,109,Misantla,2476
+30,Veracruz de Ignacio de la Llave,192,Vega de Alatorre,4474
+30,Veracruz de Ignacio de la Llave,192,Vega de Alatorre,4498
+30,Veracruz de Ignacio de la Llave,192,Vega de Alatorre,4497
+30,Veracruz de Ignacio de la Llave,67,Filomeno Mata,1480
+31,Yucatán,50,Mérida,625
+31,Yucatán,50,Mérida,265
+31,Yucatán,50,Mérida,642
+31,Yucatán,50,Mérida,639
+31,Yucatán,50,Mérida,643
+31,Yucatán,50,Mérida,254
+31,Yucatán,50,Mérida,476
+31,Yucatán,50,Mérida,638
+31,Yucatán,41,Kanasín,220
+32,Zacatecas,56,Zacatecas,1870
+32,Zacatecas,17,Guadalupe,470
+3,,4,,298
